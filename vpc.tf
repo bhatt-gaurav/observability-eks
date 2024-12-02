@@ -21,3 +21,44 @@ module "vpc" {
     "${local.name_suffix}-${local.environment}-private" = "true"
   }
 }
+
+# Cluster security group
+resource "aws_security_group" "cluster" {
+  name_prefix =         local.name_suffix
+  description = "EKS cluster security group"
+  vpc_id      = module.vpc.vpc_id
+  tags = merge(var.tags,
+  {
+    "Name" = "${local.name_suffix}-eks-cluster-sg"
+    "kubernetes.io/cluster/${local.name_suffix}-${local.environment}" = "owned"
+  })
+
+  depends_on = [  
+    module.vpc,
+    module.vpc.private_subnets,
+    module.vpc.public_subnets
+  ]
+  
+}
+
+resource "aws_security_group_rule" "cluster_egress_internet" {
+  description = "Allow cluster egress access to the internet"
+  protocol = "-1"
+  from_port = 0
+  to_port =  0
+  type = "egress"
+  security_group_id = aws_security_group.cluster.id
+  cidr_blocks = var.cluster_egress_cidr
+}
+
+resource "aws_security_group_rule" "cluster_https_worker_ingress" {
+  description = "Allow workstation to communicate with the EKS cluster API."
+  protocol = "tcp"
+  from_port = 443
+  to_port =  443
+  type = "ingress"
+  security_group_id = aws_security_group.cluster.id
+  cidr_blocks = var.cluster_endpoint_public_access_cidrs
+}
+
+

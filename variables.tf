@@ -7,6 +7,12 @@ variable "resource_tags" {
   }
 }
 
+variable "tags" {
+  type = map(string)
+  default = {}
+  
+}
+
 variable "cidr_block" {
   description = "CIDR Block for VPC"
   type = string
@@ -23,4 +29,18 @@ variable "private_subnets" {
   description = "CIDR Block for Private subnet"
   type = list(string)
   default = ["10.50.5.0/24", "10.50.6.0/24"]
+}
+
+variable "cluster_egress_cidr" {
+  description = "Allow cluster egress access to the internet"
+  type = list(string)
+  default = [ "0.0.0.0/0" ]
+  
+}
+
+variable "cluster_endpoint_public_access_cidrs" {
+  description = "Allow workstation to communicate with the EKS cluster API."
+  type = list(string)
+  default = [ "0.0.0.0/0" ]
+  
 }
