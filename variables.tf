@@ -44,3 +44,16 @@ variable "cluster_endpoint_public_access_cidrs" {
   default = [ "0.0.0.0/0" ]
   
 }
+
+# IAM
+variable "iam_cluster_role_name" {
+  description = "IAM role name for EKS cluster"
+  type = string
+  default = ""
+}
+
+variable "iam_workers_role_name" {
+  description = "IAM role name for EKS cluster worker nodes"
+  type = string
+  default = ""
+}
