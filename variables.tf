@@ -57,3 +57,10 @@ variable "iam_workers_role_name" {
   type = string
   default = ""
 }
+
+# CLuster
+variable "cluster_version" {
+  description = "Provide EKS cluster version"
+  type = string
+  default = "1.30"
+}

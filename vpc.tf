@@ -61,4 +61,31 @@ resource "aws_security_group_rule" "cluster_https_worker_ingress" {
   cidr_blocks = var.cluster_endpoint_public_access_cidrs
 }
 
+# data
+
+# retrieves private subnet 
+data "aws_subnets" "private_subnet" {
+  filter {
+    name = "tag:${local.name_suffix}-${local.environment}-private"
+    values = ["true"]
+  }
+  filter {
+    name = "availability-zone"
+    values = ["us-east-1a", "us-east-1b"]
+  }
+  depends_on = [ module.vpc ]
+}
+
+# retrieves public subnet 
+data "aws_subnets" "public_subnet" {
+  filter {
+    name = "tag:${local.name_suffix}-${local.environment}-public"
+    values = ["true"]
+  }
+  filter {
+    name = "availability-zone"
+    values = ["us-east-1a", "us-east-1b"]
+  }
+  depends_on = [ module.vpc ]
+}
 
