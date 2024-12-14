@@ -64,3 +64,20 @@ variable "cluster_version" {
   type = string
   default = "1.30"
 }
+
+# worker nodes
+
+variable "node_groups" {
+  description = "map of maps for creating node groups"
+  type = any
+  default = {
+    Devops = {
+      desired_capacity = 3
+      max_capacity = 4
+      min_capacity = 3
+      instance_types = ["m6g.large"]
+      disk_size = 10
+      capacity_type = "ON_DEMAND"
+    }
+  }
+}

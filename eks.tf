@@ -41,6 +41,8 @@ resource "aws_cloudwatch_log_group" "cluster" {
   }
 }
 
+
+
 # output "endpoint" {
 #   value = aws_eks_cluster.example.endpoint
 # }
