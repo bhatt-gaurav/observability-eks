@@ -16,4 +16,13 @@ locals {
       min_capacity = 3
     }, v)
   }
+
+  # Combine scaling policy period with nodegroup
+  combined_policy_period = flatten([for k,v in var.node_groups: [
+       for period in var.scaling_period : {
+        group_name = k
+        scaling_period = period
+       }
+    ]
+  ])
 }

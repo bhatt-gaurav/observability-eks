@@ -81,3 +81,11 @@ variable "node_groups" {
     }
   }
 }
+
+# Autoscaling
+variable "scaling_period" {
+  description = "Scaling period"
+  type = list(string)
+  default = [ "600", "1200", "1800" ]
+  
+}
