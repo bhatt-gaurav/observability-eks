@@ -16,3 +16,9 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks_cluster.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.eks_cluster.token
 }
+
+provider "helm" {
+  kubernetes {
+    config_path = "${path.module}/kubeconfig.yaml"
+  }
+}

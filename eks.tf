@@ -18,7 +18,8 @@ resource "aws_eks_cluster" "this" {
     aws_iam_role_policy_attachment.AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.AmazonEKSVPCResourceController,
     aws_iam_role_policy_attachment.ClusterIAMFullAccess,
-    aws_cloudwatch_log_group.cluster
+    aws_cloudwatch_log_group.cluster,
+    local_file.kubeconfig
   ]
   encryption_config {
     provider {
@@ -39,6 +40,13 @@ resource "aws_cloudwatch_log_group" "cluster" {
   lifecycle {
     prevent_destroy = false
   }
+}
+
+# Create kubeconfig file 
+
+resource "local_file" "kubeconfig" {
+  content = data.template_file.kubeconfig.rendered
+  filename = "${path.module}/kubeconfig.yaml"
 }
 
 

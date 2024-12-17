@@ -89,3 +89,30 @@ variable "scaling_period" {
   default = [ "600", "1200", "1800" ]
   
 }
+
+# logging
+
+variable "cloudwatch_namespace" {
+  description = "Namespace for cloudwatch"
+  type = string
+  default = "amazon-cloudwatch"
+}
+
+variable "fluent_bit" {
+  description = "fluent bit values"
+  type = any
+  default = {
+    devops = {
+      "http.server" = "off"
+      "http.port"   = "2020"
+      "read.head"   = "On"
+      "read.tail"   = "Off"
+    }
+  }
+}
+
+variable "aws_region" {
+  description = "Region for logs"
+  type = string
+  default = "us-east-1"
+}
