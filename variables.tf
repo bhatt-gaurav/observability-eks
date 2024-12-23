@@ -116,3 +116,45 @@ variable "aws_region" {
   type = string
   default = "us-east-1"
 }
+
+# Karpenter
+variable "karpenter_namespace" {
+  description = "Provide namespace for karpenter"
+  type = string
+  default = "karpenter"  
+}
+
+variable "karpenter_version" {
+  description = "Karpenter Version"
+  default     = "0.10.0"
+  type        = string
+}
+
+variable "karpenter_vpc_az" {
+  description = "az's for Karpenter"
+  type = list(string)
+  default = [ "us-east-1a", "us-east-1b" ]
+}
+
+variable "karpenter_ec2_arch" {
+  description = "List of CPU architecture for the EC2 instances provisioned by Karpenter"
+  type        = list(string)
+  default     = ["arm64"]
+}
+
+variable "karpenter_ec2_capacity_type" {
+  description = "EC2 provisioning capacity type"
+  type        = list(string)
+  default     = ["spot", "on-demand"]
+}
+variable "karpenter_ttl_seconds_after_empty" {
+  description = "Node lifetime after empty"
+  type        = number
+  default = 300
+}
+
+variable "karpenter_ttl_seconds_until_expired" {
+  description = "Node maximum lifetime"
+  type        = number
+  default = 604800  # 7days
+}
