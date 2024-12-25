@@ -57,3 +57,111 @@ variable "iam_workers_role_name" {
   type = string
   default = ""
 }
+
+# CLuster
+variable "cluster_version" {
+  description = "Provide EKS cluster version"
+  type = string
+  default = "1.30"
+}
+
+# worker nodes
+
+variable "node_groups" {
+  description = "map of maps for creating node groups"
+  type = any
+  default = {
+    Devops = {
+      desired_capacity = 3
+      max_capacity = 4
+      min_capacity = 3
+      instance_types = ["m6g.large"]
+      disk_size = 10
+      capacity_type = "ON_DEMAND"
+    }
+  }
+}
+
+# Autoscaling
+variable "scaling_period" {
+  description = "Scaling period"
+  type = list(string)
+  default = [ "600", "1200", "1800" ]
+  
+}
+
+# logging
+
+variable "cloudwatch_namespace" {
+  description = "Namespace for cloudwatch"
+  type = string
+  default = "amazon-cloudwatch"
+}
+
+variable "fluent_bit" {
+  description = "fluent bit values"
+  type = any
+  default = {
+    devops = {
+      "http.server" = "off"
+      "http.port"   = "2020"
+      "read.head"   = "On"
+      "read.tail"   = "Off"
+    }
+  }
+}
+
+variable "aws_region" {
+  description = "Region for logs"
+  type = string
+  default = "us-east-1"
+}
+
+# Karpenter
+variable "karpenter_namespace" {
+  description = "Provide namespace for karpenter"
+  type = string
+  default = "karpenter"  
+}
+
+variable "karpenter_version" {
+  description = "Karpenter Version"
+  default     = "0.10.0"
+  type        = string
+}
+
+variable "karpenter_vpc_az" {
+  description = "az's for Karpenter"
+  type = list(string)
+  default = [ "us-east-1a", "us-east-1b" ]
+}
+
+variable "karpenter_ec2_arch" {
+  description = "List of CPU architecture for the EC2 instances provisioned by Karpenter"
+  type        = list(string)
+  default     = ["arm64"]
+}
+
+variable "karpenter_ec2_capacity_type" {
+  description = "EC2 provisioning capacity type"
+  type        = list(string)
+  default     = ["spot", "on-demand"]
+}
+variable "karpenter_ttl_seconds_after_empty" {
+  description = "Node lifetime after empty"
+  type        = number
+  default = 300
+}
+
+variable "karpenter_ttl_seconds_until_expired" {
+  description = "Node maximum lifetime"
+  type        = number
+  default = 604800  # 7days
+}
+
+# s3 Bucket
+variable "state_bucket" {
+  description = "name for remote state"
+  type = string
+  default = "terraform-state-gbhatt"
+}
