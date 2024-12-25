@@ -1,10 +1,20 @@
 name: EKS Infra deployment
 
 on:
-    workflow_dispatch: 
+    workflow_dispatch:
+        inputs:
+          actions:
+            description: "Choose your action to perform"
+            required: true
+            default: plan
+            type: choice
+            options:
+              - plan
+              - apply
+      
 
 jobs:
-    terraform-plan:
+    infra-deployment:
         name: Terraform Plan
         runs-on: ubuntu-latest
         steps:
@@ -24,44 +34,21 @@ jobs:
                 aws-region: us-east-1            
 
             - name: Terraform initialize
-              run : terraform init        
-            
-            - name: Terraform plan
-              run: terraform plan
-    
-    manual-approval:
-        needs: terraform-plan
-        runs-on: ubuntu-latest
-        steps:
-            - name: Await Manual Approval
-              uses: hmarr/auto-approve-action@v2
-              with:
-                message: "Approve the plan to proceed with apply."
-    
-    terraform-apply:
-        needs: manual-approval
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v4
+              run : terraform init   
+              
+            - name: Terraform Plan or Apply
+              run: |
+                if [ "${{ github.event.inputs.action }}" == "plan" ]; then
+                    terraform plan
+                elif [ "${{ github.event.inputs.action }}" == "apply"]; then
+                    terraform apply --auto-approve
+                else
+                    echo  "Invalid action selected."
+                    exit 1
+                fi
 
-            - name: Setup terraform
-              uses: hashicorp/setup-terraform@v3
-              with:
-                terraform_version: "1.9.3"
             
-            - name: Setup AWS credentials
-              uses: aws-actions/configure-aws-credentials@v2
-              with: 
-                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                aws-region: us-east-1            
-
-            - name: Terraform initialize
-              run : terraform init        
-            
-            - name: Terraform apply
-              run: terraform apply
+      
 
 
           
