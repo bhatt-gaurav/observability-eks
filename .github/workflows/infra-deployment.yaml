@@ -11,6 +11,7 @@ on:
             options:
               - plan
               - apply
+              - destroy
       
 
 jobs:
@@ -36,12 +37,14 @@ jobs:
             - name: Terraform initialize
               run : terraform init   
               
-            - name: Terraform Plan or Apply
+            - name: Terraform Plan or Apply or Destroy
               run: |
                 if [ "${{ github.event.inputs.actions }}" == "plan" ]; then
                     terraform plan
                 elif [ "${{ github.event.inputs.actions }}" == "apply" ]; then
                     terraform apply --auto-approve
+                elif [ "${{ github.event.inputs.actions }}" == "destroy" ]; then
+                    terraform destroy --auto-approve
                 else
                     echo  "Invalid action selected."
                     exit 1
