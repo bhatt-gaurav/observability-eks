@@ -44,7 +44,7 @@ jobs:
                 elif [ "${{ github.event.inputs.actions }}" == "apply" ]; then
                     terraform apply --auto-approve
                 elif [ "${{ github.event.inputs.actions }}" == "destroy" ]; then
-                    aws eks update-kubeconfig --region us-east-1 --name eks-devops-Dev 
+                    aws eks update-kubeconfig --region us-east-1 --name eks-devops-Dev --kubeconfig observability-eks
                     terraform destroy --auto-approve
                 else
                     echo  "Invalid action selected."
