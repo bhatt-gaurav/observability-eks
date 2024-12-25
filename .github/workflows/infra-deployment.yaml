@@ -38,9 +38,9 @@ jobs:
               
             - name: Terraform Plan or Apply
               run: |
-                if [ "${{ github.event.inputs.action }}" == "plan" ]; then
+                if [ "${{ github.event.inputs.actions }}" == "plan" ]; then
                     terraform plan
-                elif [ "${{ github.event.inputs.action }}" == "apply"]; then
+                elif [ "${{ github.event.inputs.actions }}" == "apply" ]; then
                     terraform apply --auto-approve
                 else
                     echo  "Invalid action selected."
