@@ -6,6 +6,13 @@ terraform {
       version = "~> 5.0"
     }
   }
+    backend "s3" {
+    bucket         = "terraform-state-gbhatt"
+    key            = "Dev/terraform.state"
+    region         = "us-east-1"
+    dynamodb_table = "remote-state-lock"
+    encrypt        = true
+  }
 }
 provider "aws" {
   region = "us-east-1"

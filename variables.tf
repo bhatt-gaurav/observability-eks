@@ -158,3 +158,10 @@ variable "karpenter_ttl_seconds_until_expired" {
   type        = number
   default = 604800  # 7days
 }
+
+# s3 Bucket
+variable "state_bucket" {
+  description = "name for remote state"
+  type = string
+  default = "terraform-state-gbhatt"
+}
