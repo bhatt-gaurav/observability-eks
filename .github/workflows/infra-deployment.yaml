@@ -1,0 +1,27 @@
+name: EKS Infra deployment
+
+on:
+    workflow_dispatch: 
+
+jobs:
+    terraform-deployment:
+        name: Terraform deployment
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - uses: hashicorp/setup-terraform@v3
+              with:
+                terraform_version: "1.1.7"
+
+            - name: Terraform initialize
+              run : terrafom init
+              working-directory: observability-eks
+            
+            - name: Terraform plan
+              run: terraform plan
+              working-directory:  observability-eks
+
+          
+
